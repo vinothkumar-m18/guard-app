@@ -1,0 +1,49 @@
+{
+    "editor.fontFamily": "'Courier New', monospace",
+    "editor.fontSize": 17,
+    "editor.fontWeight": "normal",
+    "editor.autoIndent": "full",
+    "editor.formatOnSave": true,
+    "editor.wordWrap": "on",
+    "editor.lineHeight": 1.5,
+    "editor.minimap.enabled": false,
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    "terminal.integrated.fontFamily": "'Courier New', monospace",
+    "terminal.integrated.fontSize": 16,
+    "terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.cursorStyle": "block",
+    "terminal.integrated.cursorWidth": 2,
+    "terminal.integrated.lineHeight": 1.2,
+    "terminal.integrated.minimumContrastRatio": 4.5,
+    "terminal.integrated.enablePersistentSessions": false,
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "terminal.integrated.profiles.windows": {
+        "Git Bash": {
+            "path": "C:\\Program Files\\Git\\bin\\bash.exe",
+            "icon": "terminal-bash"
+        }
+    },
+    // ===================== EMMET =====================
+    "emmet.includeLanguages": {
+        "javascript": "javascriptreact",
+        "javascriptreact": "html",
+        "typescript": "typescriptreact",
+        "typescriptreact": "html"
+    },
+    "emmet.triggerExpansionOnTab": true,
+    // ===================== TAG AUTO-CLOSE =====================
+    "editor.autoClosingBrackets": "always",
+    "editor.autoClosingQuotes": "always",
+    "editor.autoSurround": "languageDefined",
+    "postman.settings.dotenv-detection-notification-visibility": false,
+    "java.project.sourcePaths": [
+        ".",
+        "src"
+    ],
+    "java.project.referencedLibraries": [
+        "lib\\mysql-connector-j-9.6.0.jar"
+    ],
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "interactive"
+}

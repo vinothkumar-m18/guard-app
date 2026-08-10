@@ -1,0 +1,15 @@
+--------- beginning of main
+08-10 11:07:15.978  9605  9605 I adbd    : adbd service requested 'shell,v2,TERM=xterm-256color,raw:am start -n com.vinoth.guardapp/.MainActivity'
+08-10 11:07:16.098 22476 22476 E cmd     : BBinder_init Processname  cmd  
+08-10 11:07:16.098 22476 22476 E cmd     : BBinder_init hasGetProcessName  cmd
+08-10 11:07:16.200 20792 20827 I BLASTBufferQueue: QoSAllocBuff Successful. Ret 0 
+08-10 11:07:16.219  2262  2456 I ActivityTaskManager: Displayed com.vinoth.guardapp/.MainActivity for user 0: +111ms
+08-10 11:07:16.250 13020 13020 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():2276 
+08-10 11:07:16.253 13020 13020 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1460 onStartInput(EditorInfo{EditorInfo{packageName=com.vinoth.guardapp, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+08-10 11:07:16.253 13020 13020 I LatinIMEBase: LatinIMEBase.updateInputViewCoverNavigation():317 Update input view padding, isNavbarOverInputWindow=false, bottom inset=0
+08-10 11:07:16.253 13020 22486 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatusInternal():129 repeatCheckTimes = 0, locked = false
+08-10 11:07:16.256 13020 22487 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatusInternal():129 repeatCheckTimes = 1, locked = false
+08-10 11:07:16.587 21645 21721 I DGW     : I[notifyPingFailure:2279] StreamGroupTransport[notifgateway] kill connection on ping timeout
+08-10 11:07:16.587 21645 21721 I DGW     : I[notifyStreamGroupError:1903] StreamGroupTransport[notifgateway] notify StreamGroup error: StreamGroupNetworkRequest failed - ping timeout error
+08-10 11:07:16.588 21645 21721 W DGW     : W[onPingFailure:593] ConnectivityManager ping failure TransientError domain: MNSHTTPClient code: 3 detail: Host session was closed, pending transactions: non-zero
+08-10 11:07:18.930  9605  9605 I adbd    : adbd service requested 'shell,v2,TERM=xterm-256color:export ANDROID_LOG_TAGS=''; exec logcat '-d''

@@ -1,0 +1,164 @@
+--------- beginning of main
+08-10 10:58:50.145 14324 14448 E msys    : E[N WA]_WAJMNSStreamImplOnMNSFailure(290)=>[LogLevel:I] WAJMNSStream/impl/callback/onMNSFailure/p=0xb400006e300c6d80 (error=SO_ERROR: Connection timed out)
+08-10 10:58:50.147 14324 14448 E msys    : E[N WA]_WAJMNSStreamImplCreateConnectionReport(197)=>[LogLevel:I] WAJMNSStream/impl/report port=5222, connectedIPVersion=0, resolvedIPAddressCount=0, dnsResolutionStartTimeMS=0, dnsResolutionEndTimeMS=0, dnsCacheHit=N/A, connectStartTimeMS=508497897, connectEndTimeMS=508533468, proxyConnectStartTimeMS=0, proxyConnectEndTimeMS=0
+08-10 10:58:50.148 14324 14448 E msys    : E[N WA]_WAJMNSStreamImplUpdateStreamState(233)=>[LogLevel:I] WAJMNSStream/impl/state-changed/p=0xb400006e300c6d80 (connecting=>disconnected)
+08-10 10:58:50.166 14324 14448 E msys    : E[N mns]_LogError(328)=>Failed to resolve using secondary DNS resolver, ares error: Timeout while contacting DNS servers, timeouts: 12
+08-10 10:58:50.379 14324 14448 E msys    : E[N mns]_LogError(328)=>Failed to resolve using secondary DNS resolver, ares error: Timeout while contacting DNS servers, timeouts: 14
+08-10 10:58:50.390 16770 16816 I DGW     : I[sendRequest:85] StreamGroupConnectivityAwareNetworkLayer[notifgateway] buffering request with connection state: 2
+08-10 10:58:53.168 14324 14448 E msys    : E[N mns]_LogError(328)=>Failed to resolve using secondary DNS resolver, ares error: Timeout while contacting DNS servers, timeouts: 14
+08-10 10:58:55.665 16343 16383 I BLASTBufferQueue: QoSAllocBuff Successful. Ret 0 
+08-10 10:58:55.693 16343 16363 I vinoth.guardapp: Background young concurrent copying GC freed 2319KB AllocSpace bytes, 0(0B) LOS objects, 39% free, 3484KB/5783KB, paused 44us,82us total 116.965ms
+08-10 10:58:55.769 28284 28284 I Zygote  : Process 16726 exited due to signal 9 (Killed)
+08-10 10:58:55.869 13020 13020 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():2276 
+08-10 10:58:55.872 16481 16724 W cr_ChildProcessConn: onServiceDisconnected (crash or killed by oom): pid=0 bindings:WV  
+08-10 10:58:55.888 13020 13020 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1460 onStartInput(EditorInfo{EditorInfo{packageName=com.vinoth.guardapp, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+08-10 10:58:55.891 13020 13020 I LatinIMEBase: LatinIMEBase.updateInputViewCoverNavigation():317 Update input view padding, isNavbarOverInputWindow=false, bottom inset=0
+08-10 10:58:55.891 13020 14895 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatusInternal():129 repeatCheckTimes = 0, locked = false
+08-10 10:58:55.909 13020 15131 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatusInternal():129 repeatCheckTimes = 1, locked = false
+08-10 10:58:56.621 15931 16934 I RcsProvisioningFlow: Handling SIM state update work request for 2 with updateTrigger 7, scheduledAt 2026-08-10T05:27:26.536Z.
+08-10 10:58:56.632 15931 16934 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=a188888f-0477-416e-9b35-a351d12e7eb4, class=com.google.android.apps.messaging.shared.datamodel.workqueue.WorkQueueWorkerShim, tags={ com.google.android.apps.messaging.shared.datamodel.workqueue.WorkQueueWorkerShim,sim_state_update_queue-WORK_TYPE_VERIFY_SIM_REMOVAL } ]
+08-10 10:58:56.658 15931 16342 I BugleConnectivity: Connection state change: SIM removed, data connection: UNKNOWN, manual connection eligibility: false, ntn roaming: false
+08-10 10:58:56.661 15931 16342 I BugleSimStateTracker: Broadcasting SimRemoval for: []
+08-10 10:58:56.666 15931 16106 I BugleSimStateTracker: default call SIM: redacted-pii:sim_id[chars:20,last3:23F], default sms SIM redacted-pii:sim_id[chars:20,last3:23F]. default data SIM redacted-pii:sim_id[chars:20,last3:23F].
+08-10 10:58:56.667 15931 16106 I BugleSimStateTracker: default call SIM: redacted-pii:sim_id[chars:20,last3:23F], default sms SIM redacted-pii:sim_id[chars:20,last3:23F]. default data SIM redacted-pii:sim_id[chars:20,last3:23F].
+08-10 10:58:58.166 23111 23185 W native  : W0000 00:00:1786339738.166160   23185 lag_detector.cc:58] Pipeline lagging by 2m1.45998873s. Continue processing samples.
+08-10 10:58:59.110 14324 14458 E msys    : E[N mns:TigonMNS]_LogError(328)=>Failed to resolve using system DNS resolver, getaddrinfo(): No address associated with hostname
+08-10 10:59:02.079 14324 14458 E msys    : E[N mns:TigonMNS]_LogError(328)=>Failed to resolve using system DNS resolver, getaddrinfo(): No address associated with hostname
+08-10 10:59:05.118 14324 14458 E msys    : E[N mns:TigonMNS]_LogError(328)=>Failed to resolve using system DNS resolver, getaddrinfo(): No address associated with hostname
+08-10 10:59:06.633  9605  9605 I adbd    : Remote process closed the socket (on MSG_PEEK)
+08-10 10:59:07.755 13020 13020 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():2276 
+08-10 10:59:07.756 13020 13020 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1460 onStartInput(EditorInfo{EditorInfo{packageName=com.vinoth.guardapp, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+08-10 10:59:07.756 13020 13020 I LatinIMEBase: LatinIMEBase.updateInputViewCoverNavigation():317 Update input view padding, isNavbarOverInputWindow=false, bottom inset=0
+08-10 10:59:07.766 13020 14950 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatusInternal():129 repeatCheckTimes = 0, locked = false
+08-10 10:59:07.767 13020 14950 I Module  : DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatusInternal():129 repeatCheckTimes = 1, locked = false
+08-10 10:59:08.065 23111 23192 W ProxyAndroidLoggerBackend: Too many Flogger logs received before configuration. Dropping old logs.
+08-10 10:59:08.087 14324 14458 E msys    : E[N mns:TigonMNS]_LogError(328)=>Failed to resolve using system DNS resolver, getaddrinfo(): No address associated with hostname
+08-10 10:59:08.185 23111 23185 W native  : W0000 00:00:1786339748.185630   23185 lag_detector.cc:58] Pipeline lagging by 2m1.459459611s. Continue processing samples.
+08-10 10:59:08.631 17096 17138 I Finsky  : [7588] Stats for Executor: LightweightExecutor wow@a7346d2[Running, pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 217]
+08-10 10:59:08.651 17096 17138 I Finsky  : [7588] Stats for Executor: BlockingExecutor wow@25ddb15[Running, pool size = 3, active threads = 0, queued tasks = 0, completed tasks = 33]
+08-10 10:59:08.677 17096 17138 I Finsky  : [7588] Stats for Executor: bgExecutor wow@b76b98a[Running, pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 145]
+08-10 10:59:10.284 17096 17138 I Finsky  : [7588] Stats for Executor: GrpcBackgroundExecutor wow@94efcba[Running, pool size = 2, active threads = 0, queued tasks = 0, completed tasks = 2]
+08-10 10:59:10.806 23111 23185 I native  : I0000 00:00:1786339750.806673   23185 soda_async_impl.cc:1420] Current audio timestamp: 1786339629356168
+08-10 10:59:11.230 16770 16816 W DGW     : W[onPingFailure:593] ConnectivityManager ping failure Ping Timeout
+08-10 10:59:12.238 16770 16816 W DGW     : W[onPingFailure:593] ConnectivityManager ping failure TransientError domain: MNSDNSResolver code: 0 detail: getaddrinfo(): No address associated with hostname
+08-10 10:59:13.984  5334 10019 W drck    : (REDACTED) Error reading dmabuf proc %s
+08-10 10:59:13.984  5334 10019 W drck    : java.io.FileNotFoundException: /proc/5334/dmabuf_rss: open failed: ENOENT (No such file or directory)
+08-10 10:59:13.984  5334 10019 W drck    : 	at libcore.io.IoBridge.open(IoBridge.java:574)
+08-10 10:59:13.984  5334 10019 W drck    : 	at java.io.FileInputStream.<init>(FileInputStream.java:179)
+08-10 10:59:13.984  5334 10019 W drck    : 	at fixl.a(PG:10)
+08-10 10:59:13.984  5334 10019 W drck    : 	at drmr.f(PG:43)
+08-10 10:59:13.984  5334 10019 W drck    : 	at drmr.b(PG:215)
+08-10 10:59:13.984  5334 10019 W drck    : 	at drmi.apply(PG:19)
+08-10 10:59:13.984  5334 10019 W drck    : 	at fkck.c(PG:3)
+08-10 10:59:13.984  5334 10019 W drck    : 	at fkcm.run(PG:47)
+08-10 10:59:13.984  5334 10019 W drck    : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:520)
+08-10 10:59:13.984  5334 10019 W drck    : 	at java.util.concurrent.FutureTask.run(FutureTask.java:328)
+08-10 10:59:13.984  5334 10019 W drck    : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:323)
+08-10 10:59:13.984  5334 10019 W drck    : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1100)
+08-10 10:59:13.984  5334 10019 W drck    : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+08-10 10:59:13.984  5334 10019 W drck    : 	at drch.run(PG:12)
+08-10 10:59:13.984  5334 10019 W drck    : 	at java.lang.Thread.run(Thread.java:1572)
+08-10 10:59:13.984  5334 10019 W drck    : Caused by: android.system.ErrnoException: open failed: ENOENT (No such file or directory)
+08-10 10:59:13.984  5334 10019 W drck    : 	at libcore.io.Linux.open(Native Method)
+08-10 10:59:13.984  5334 10019 W drck    : 	at libcore.io.ForwardingOs.open(ForwardingOs.java:579)
+08-10 10:59:13.984  5334 10019 W drck    : 	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+08-10 10:59:13.984  5334 10019 W drck    : 	at libcore.io.ForwardingOs.open(ForwardingOs.java:579)
+08-10 10:59:13.984  5334 10019 W drck    : 	at android.app.ActivityThread$AndroidOs.open(ActivityThread.java:9784)
+08-10 10:59:13.984  5334 10019 W drck    : 	at libcore.io.IoBridge.open(IoBridge.java:560)
+08-10 10:59:13.984  5334 10019 W drck    : 	... 14 more
+08-10 10:59:14.618 14324 14424 E msys    : E[N WA]_WAJMNSStreamImplMNSTCPStreamCreate(371)=>[LogLevel:I] WAJMNSStream/impl/tcpStreamCreate/MNSStreamRaw/p=0xb400006e300c9b10
+08-10 10:59:14.619 14324 14424 E msys    : E[N WA]WAJMNSStreamImplCreate(431)=>[LogLevel:I] WAJMNSStream/impl/create/p=0xb400006e300c9b10 (mnsConn=0xb400006e40052e30)
+08-10 10:59:14.620 14324 14424 E msys    : E[N WA]_WAJMNSStreamCreateMnsIpsFromIpAddressStrings(90)=>[LogLevel:I] no ip addresses provided, using DNS resolution
+08-10 10:59:14.620 14324 14424 E msys    : E[N WA]WAJMNSStreamImplConnect(460)=>[LogLevel:I] WAJMNSStream/impl/connect/p=0xb400006e300c9b10 (endpoint=e16.whatsapp.net.:5222)(ipAddressCount=0)
+08-10 10:59:14.621 14324 14424 E msys    : E[N WA]_WAJMNSStreamImplUpdateStreamState(233)=>[LogLevel:I] WAJMNSStream/impl/state-changed/p=0xb400006e300c9b10 (initial=>connecting)
+08-10 10:59:15.411 16770 16816 I DGW     : I[notifyPingFailure:2279] StreamGroupTransport[notifgateway] kill connection on ping timeout
+08-10 10:59:15.412 16770 16816 I DGW     : I[notifyStreamGroupError:1903] StreamGroupTransport[notifgateway] notify StreamGroup error: StreamGroupNetworkRequest failed - ping timeout error
+08-10 10:59:18.187 23111 23185 W native  : W0000 00:00:1786339758.187238   23185 lag_detector.cc:58] Pipeline lagging by 2m1.461066378s. Continue processing samples.
+08-10 10:59:18.349 17928 17928 E cmd     : BBinder_init Processname  cmd  
+08-10 10:59:18.350 17928 17928 E cmd     : BBinder_init hasGetProcessName  cmd
+08-10 10:59:18.795 16770 16816 I DGW     : I[sendRequest:85] StreamGroupConnectivityAwareNetworkLayer[notifgateway] buffering request with connection state: 2
+08-10 10:59:19.189 17397 17419 I Finsky:background: [7598] Stats for Executor: bgExecutor wow@25ddb15[Running, pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 54]
+08-10 10:59:19.207 17397 17419 I Finsky:background: [7598] Stats for Executor: LightweightExecutor wow@3e6a3c9[Running, pool size = 4, active threads = 0, queued tasks = 0, completed tasks = 10]
+08-10 10:59:19.290 17397 17419 I Finsky:background: [7598] Stats for Executor: BlockingExecutor wow@bf5626d[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1]
+08-10 10:59:20.098 14324 14448 E msys    : E[N WA]_WAJMNSStreamImplOnMNSFailure(290)=>[LogLevel:I] WAJMNSStream/impl/callback/onMNSFailure/p=0xb400006e3009d6e0 (error=SO_ERROR: Connection timed out)
+08-10 10:59:20.099 14324 14448 E msys    : E[N WA]_WAJMNSStreamImplCreateConnectionReport(197)=>[LogLevel:I] WAJMNSStream/impl/report port=80, connectedIPVersion=0, resolvedIPAddressCount=0, dnsResolutionStartTimeMS=0, dnsResolutionEndTimeMS=0, dnsCacheHit=N/A, connectStartTimeMS=508527921, connectEndTimeMS=508563421, proxyConnectStartTimeMS=0, proxyConnectEndTimeMS=0
+08-10 10:59:20.099 14324 14448 E msys    : E[N WA]_WAJMNSStreamImplUpdateStreamState(233)=>[LogLevel:I] WAJMNSStream/impl/state-changed/p=0xb400006e3009d6e0 (connecting=>disconnected)
+08-10 10:59:20.642 14324 14448 E msys    : E[N mns]_LogError(328)=>Failed to resolve using system DNS resolver, getaddrinfo(): No address associated with hostname
+08-10 10:59:20.643 14324 14448 E msys    : E[N mns]_TryFallbackToSecondary(843)=>Falling back to secondary DNS resolver
+08-10 10:59:23.366  9605  9605 I adbd    : adbd service requested 'shell,v2,TERM=xterm-256color:export ANDROID_LOG_TAGS=''; exec logcat '-d''
+08-10 10:59:25.116 14324 14330 I com.whatsapp: Background young concurrent copying GC freed 2027KB AllocSpace bytes, 17(460KB) LOS objects, 33% free, 7727KB/11MB, paused 177us,94us total 139.488ms
+08-10 10:59:25.138 14324 14389 E WM-WorkerWrapper: Work [ id=426faeda-f032-45b3-aba5-e3219ed51ed5, tags={ com.whatsapp.infra.networking.xmpp.lifecycle.XmppLifecycleWorker } ] failed because it threw an exception/error
+08-10 10:59:25.138 14324 14389 E WM-WorkerWrapper: X.Izz: The completer object was garbage collected - this future would otherwise never complete. The tag was: 0dJ{Active}@bbeb74d
+08-10 10:59:26.329 17397 17551 I PlayCommon: [7638] Preparing logs for uploading
+08-10 10:59:26.354 17397 17551 I PlayCommon: [7638] Connecting to server for timestamp: https://play.googleapis.com/play/log/timestamp
+08-10 10:59:28.206 23111 23185 W native  : W0000 00:00:1786339768.206753   23185 lag_detector.cc:58] Pipeline lagging by 2m1.460581635s. Continue processing samples.
+08-10 10:59:30.766  9605  9605 I adbd    : adbd service requested 'shell,v2,TERM=xterm-256color:export ANDROID_LOG_TAGS=''; exec logcat '-d''
+08-10 10:59:31.000 14324 14458 E msys    : E[N mns:TigonMNS]_LogError(328)=>Failed to resolve using system DNS resolver, getaddrinfo(): No address associated with hostname
+08-10 10:59:32.373 17397 17551 E PlayCommon: [7638] Failed to connect to server for server timestamp: java.net.UnknownHostException: Unable to resolve host "play.googleapis.com": No address associated with hostname
+08-10 10:59:32.378 17397 17551 I PlayCommon: [7638] Connecting to server: https://play.googleapis.com/play/log?format=raw&proto_v2=true
+08-10 10:59:32.379 17397 17551 E PlayCommon: [7638] Failed to connect to server for log upload.
+08-10 10:59:34.302 14324 14458 E msys    : E[N mns:TigonMNS]_LogError(328)=>Failed to resolve using system DNS resolver, getaddrinfo(): No address associated with hostname
+08-10 10:59:34.597 17096 17115 I IPCThreadState: oneway function results for code 2 on binder at 0xb400006d50062a20 will be dropped but finished with status UNKNOWN_TRANSACTION
+08-10 10:59:37.009 14324 14458 E msys    : E[N mns:TigonMNS]_LogError(328)=>Failed to resolve using system DNS resolver, getaddrinfo(): No address associated with hostname
+08-10 10:59:37.009 14324 14458 E msys    : E[N mns:TigonMNS]_LogError(328)=>Failed to resolve using system DNS resolver, getaddrinfo(): No address associated with hostname
+08-10 10:59:38.066 23111 23192 W ProxyAndroidLoggerBackend: Too many Flogger logs received before configuration. Dropping old logs.
+08-10 10:59:38.207 23111 23185 W native  : W0000 00:00:1786339778.206924   23185 lag_detector.cc:58] Pipeline lagging by 2m1.45075335s. Continue processing samples.
+08-10 10:59:40.311 14324 14458 E msys    : E[N mns:TigonMNS]_LogError(328)=>Failed to resolve using system DNS resolver, getaddrinfo(): No address associated with hostname
+08-10 10:59:40.806 23111 23185 I native  : I0000 00:00:1786339780.806379   23185 soda_async_impl.cc:1420] Current audio timestamp: 1786339659356168
+08-10 10:59:42.030 14324 14448 E msys    : E[N mns]_LogError(328)=>Failed to resolve using secondary DNS resolver, ares error: Timeout while contacting DNS servers, timeouts: 10
+08-10 10:59:43.810 16770 16816 I DGW     : I[notifyPingFailure:2279] StreamGroupTransport[notifgateway] kill connection on ping timeout
+08-10 10:59:43.811 16770 16816 I DGW     : I[notifyStreamGroupError:1903] StreamGroupTransport[notifgateway] notify StreamGroup error: StreamGroupNetworkRequest failed - ping timeout error
+08-10 10:59:43.813 16770 16816 W DGW     : W[onPingFailure:593] ConnectivityManager ping failure TransientError domain: MNSHTTPClient code: 3 detail: Host session was closed, pending transactions: non-zero
+08-10 10:59:44.639 14324 14424 E msys    : E[N WA]_WAJMNSStreamImplMNSTCPStreamCreate(371)=>[LogLevel:I] WAJMNSStream/impl/tcpStreamCreate/MNSStreamRaw/p=0xb400006e300c5c10
+08-10 10:59:44.639 14324 14424 E msys    : E[N WA]WAJMNSStreamImplCreate(431)=>[LogLevel:I] WAJMNSStream/impl/create/p=0xb400006e300c5c10 (mnsConn=0xb400006e400552c0)
+08-10 10:59:44.640 14324 14424 E msys    : E[N WA]_WAJMNSStreamCreateMnsIpsFromIpAddressStrings(90)=>[LogLevel:I] no ip addresses provided, using DNS resolution
+08-10 10:59:44.640 14324 14424 E msys    : E[N WA]WAJMNSStreamImplConnect(460)=>[LogLevel:I] WAJMNSStream/impl/connect/p=0xb400006e300c5c10 (endpoint=e12.whatsapp.net.:80)(ipAddressCount=0)
+08-10 10:59:44.641 14324 14424 E msys    : E[N WA]_WAJMNSStreamImplUpdateStreamState(233)=>[LogLevel:I] WAJMNSStream/impl/state-changed/p=0xb400006e300c5c10 (initial=>connecting)
+08-10 10:59:48.226 23111 23185 W native  : W0000 00:00:1786339788.226528   23185 lag_detector.cc:58] Pipeline lagging by 2m1.460356523s. Continue processing samples.
+08-10 10:59:48.877 16770 16816 I DGW     : I[sendRequest:85] StreamGroupConnectivityAwareNetworkLayer[notifgateway] buffering request with connection state: 2
+08-10 10:59:50.305 14324 14448 E msys    : E[N WA]_WAJMNSStreamImplOnMNSFailure(290)=>[LogLevel:I] WAJMNSStream/impl/callback/onMNSFailure/p=0xb400006e300c9b10 (error=SO_ERROR: Connection timed out)
+08-10 10:59:50.310 14324 14448 E msys    : E[N WA]_WAJMNSStreamImplCreateConnectionReport(197)=>[LogLevel:I] WAJMNSStream/impl/report port=5222, connectedIPVersion=0, resolvedIPAddressCount=1, dnsResolutionStartTimeMS=508557944, dnsResolutionEndTimeMS=508557945, dnsCacheHit=Yes, connectStartTimeMS=508557945, connectEndTimeMS=508593628, proxyConnectStartTimeMS=0, proxyConnectEndTimeMS=0
+08-10 10:59:50.311 14324 14448 E msys    : E[N WA]_WAJMNSStreamImplUpdateStreamState(233)=>[LogLevel:I] WAJMNSStream/impl/state-changed/p=0xb400006e300c9b10 (connecting=>disconnected)
+08-10 10:59:50.658 14324 14448 E msys    : E[N mns]_LogError(328)=>Failed to resolve using system DNS resolver, getaddrinfo(): No address associated with hostname
+08-10 10:59:50.658 14324 14448 E msys    : E[N mns]_TryFallbackToSecondary(843)=>Falling back to secondary DNS resolver
+08-10 10:59:58.246 23111 23185 W native  : W0000 00:00:1786339798.246096   23185 lag_detector.cc:58] Pipeline lagging by 2m1.45992454s. Continue processing samples.
+08-10 10:59:58.538   716 17224 D SQLiteQueryBuilder: SELECT warn_flag, data, install_from, certmd5, description, apk_model_virus_type, need_isolation_dialog, ai_v2_predict_md5, file_sha256, app_tag, cloud, path, virusname, description_id, file_md5, ai_v2_predict_type, vivo_risk_type, req_ignore_battery, install_time, cert_sha256, engType, certHash, acc_service_name, packagename, icon_danger, high_power_res, softname, is_alert, hidden_entrance, safetype, version_name, ai_v2_model_ver, cert_sha1, engine_sub_info, ai_flag, ai_predict, ai_v2_predict_finish, hotfix_flag, installSpreadFlag, _id, time, app_version_name FROM virus_cache_table WHERE (packagename=?)
+08-10 10:59:58.555   716 17224 D SQLiteQueryBuilder: SELECT risk_type, show_toast_time, activity_set, aiflag, virus_description, apk_type, pay_switch_mobile_flag, app_name, risk_level, path, policy_type, virus_description_id, payment_type, move_in_time, disable_permissions, package_name, hotfix_flag, _id, virus_name, is_check, show_dialog FROM app_isolation_table WHERE (path=?)
+08-10 10:59:58.561   716 17224 D SQLiteQueryBuilder: SELECT cert_hash, _id FROM app_white_sign_list WHERE (cert_hash=?)
+08-10 10:59:58.566   716 17224 D SQLiteQueryBuilder: SELECT warn_flag, data, install_from, certmd5, description, apk_model_virus_type, need_isolation_dialog, ai_v2_predict_md5, file_sha256, app_tag, cloud, path, virusname, description_id, file_md5, ai_v2_predict_type, vivo_risk_type, req_ignore_battery, install_time, cert_sha256, engType, certHash, acc_service_name, packagename, icon_danger, high_power_res, softname, is_alert, hidden_entrance, safetype, version_name, ai_v2_model_ver, cert_sha1, engine_sub_info, ai_flag, ai_predict, ai_v2_predict_finish, hotfix_flag, installSpreadFlag, _id, time, app_version_name FROM virus_cache_table WHERE (packagename=?)
+08-10 10:59:58.569   716 17224 D SQLiteQueryBuilder: SELECT risk_type, show_toast_time, activity_set, aiflag, virus_description, apk_type, pay_switch_mobile_flag, app_name, risk_level, path, policy_type, virus_description_id, payment_type, move_in_time, disable_permissions, package_name, hotfix_flag, _id, virus_name, is_check, show_dialog FROM app_isolation_table WHERE (path=?)
+08-10 10:59:58.572   716 17224 D SQLiteQueryBuilder: SELECT cert_hash, _id FROM app_white_sign_list WHERE (cert_hash=?)
+08-10 10:59:58.584   716 17224 D SQLiteQueryBuilder: SELECT warn_flag, data, install_from, certmd5, description, apk_model_virus_type, need_isolation_dialog, ai_v2_predict_md5, file_sha256, app_tag, cloud, path, virusname, description_id, file_md5, ai_v2_predict_type, vivo_risk_type, req_ignore_battery, install_time, cert_sha256, engType, certHash, acc_service_name, packagename, icon_danger, high_power_res, softname, is_alert, hidden_entrance, safetype, version_name, ai_v2_model_ver, cert_sha1, engine_sub_info, ai_flag, ai_predict, ai_v2_predict_finish, hotfix_flag, installSpreadFlag, _id, time, app_version_name FROM virus_cache_table WHERE (packagename=?)
+08-10 10:59:58.586   716 17224 D SQLiteQueryBuilder: SELECT risk_type, show_toast_time, activity_set, aiflag, virus_description, apk_type, pay_switch_mobile_flag, app_name, risk_level, path, policy_type, virus_description_id, payment_type, move_in_time, disable_permissions, package_name, hotfix_flag, _id, virus_name, is_check, show_dialog FROM app_isolation_table WHERE (path=?)
+08-10 10:59:58.632   716 17224 D SQLiteQueryBuilder: SELECT warn_flag, data, install_from, certmd5, description, apk_model_virus_type, need_isolation_dialog, ai_v2_predict_md5, file_sha256, app_tag, cloud, path, virusname, description_id, file_md5, ai_v2_predict_type, vivo_risk_type, req_ignore_battery, install_time, cert_sha256, engType, certHash, acc_service_name, packagename, icon_danger, high_power_res, softname, is_alert, hidden_entrance, safetype, version_name, ai_v2_model_ver, cert_sha1, engine_sub_info, ai_flag, ai_predict, ai_v2_predict_finish, hotfix_flag, installSpreadFlag, _id, time, app_version_name FROM virus_cache_table WHERE (packagename=?)
+08-10 10:59:58.636   716 17224 D SQLiteQueryBuilder: SELECT risk_type, show_toast_time, activity_set, aiflag, virus_description, apk_type, pay_switch_mobile_flag, app_name, risk_level, path, policy_type, virus_description_id, payment_type, move_in_time, disable_permissions, package_name, hotfix_flag, _id, virus_name, is_check, show_dialog FROM app_isolation_table WHERE (path=?)
+08-10 10:59:58.639   716 17224 D SQLiteQueryBuilder: SELECT cert_hash, _id FROM app_white_sign_list WHERE (cert_hash=?)
+08-10 10:59:58.642   716 17224 D SQLiteQueryBuilder: SELECT warn_flag, data, install_from, certmd5, description, apk_model_virus_type, need_isolation_dialog, ai_v2_predict_md5, file_sha256, app_tag, cloud, path, virusname, description_id, file_md5, ai_v2_predict_type, vivo_risk_type, req_ignore_battery, install_time, cert_sha256, engType, certHash, acc_service_name, packagename, icon_danger, high_power_res, softname, is_alert, hidden_entrance, safetype, version_name, ai_v2_model_ver, cert_sha1, engine_sub_info, ai_flag, ai_predict, ai_v2_predict_finish, hotfix_flag, installSpreadFlag, _id, time, app_version_name FROM virus_cache_table WHERE (packagename=?)
+08-10 10:59:58.646   716 17224 D SQLiteQueryBuilder: SELECT risk_type, show_toast_time, activity_set, aiflag, virus_description, apk_type, pay_switch_mobile_flag, app_name, risk_level, path, policy_type, virus_description_id, payment_type, move_in_time, disable_permissions, package_name, hotfix_flag, _id, virus_name, is_check, show_dialog FROM app_isolation_table WHERE (path=?)
+08-10 10:59:58.649   716 17224 D SQLiteQueryBuilder: SELECT cert_hash, _id FROM app_white_sign_list WHERE (cert_hash=?)
+08-10 10:59:58.657   716 17224 D SQLiteQueryBuilder: SELECT warn_flag, data, install_from, certmd5, description, apk_model_virus_type, need_isolation_dialog, ai_v2_predict_md5, file_sha256, app_tag, cloud, path, virusname, description_id, file_md5, ai_v2_predict_type, vivo_risk_type, req_ignore_battery, install_time, cert_sha256, engType, certHash, acc_service_name, packagename, icon_danger, high_power_res, softname, is_alert, hidden_entrance, safetype, version_name, ai_v2_model_ver, cert_sha1, engine_sub_info, ai_flag, ai_predict, ai_v2_predict_finish, hotfix_flag, installSpreadFlag, _id, time, app_version_name FROM virus_cache_table WHERE (packagename=?)
+08-10 10:59:58.661   716 17224 D SQLiteQueryBuilder: SELECT risk_type, show_toast_time, activity_set, aiflag, virus_description, apk_type, pay_switch_mobile_flag, app_name, risk_level, path, policy_type, virus_description_id, payment_type, move_in_time, disable_permissions, package_name, hotfix_flag, _id, virus_name, is_check, show_dialog FROM app_isolation_table WHERE (path=?)
+08-10 11:00:00.206 18239 18239 I artd    : Starting artd
+08-10 11:00:00.208 18239 18239 E artd    : BBinder_init Processname  /apex/com.android.art/bin/artd  
+08-10 11:00:00.208 18239 18239 E artd    : BBinder_init hasGetProcessName  /apex/com.android.art/bin/artd
+08-10 11:00:00.210 18239 18239 I AidlLazyServiceRegistrar: Registering service artd
+08-10 11:00:00.216 18239 18239 I AidlLazyServiceRegistrar: Process has 1 (of 1 available) client(s) in use after notification artd has clients: 1
+08-10 11:00:00.359 18239 18256 I artd    : GetBestInfo: odex in dalvik-cache (/data/dalvik-cache/arm64/system@priv-app@Settings@Settings.apk@classes.dex) is kOatUpToDate with filter 'speed-profile' executable 'false'
+08-10 11:00:04.631 18239 18256 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~hZVYxzFmDzfiTfqkGkYKOA==/com.google.android.gms-fR8fSEd6YxCOeRrKPKPW5Q==/oat/arm64/base.odex) is kOatUpToDate with filter 'speed-profile' executable 'false'
+08-10 11:00:04.638 18239 18256 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~hZVYxzFmDzfiTfqkGkYKOA==/com.google.android.gms-fR8fSEd6YxCOeRrKPKPW5Q==/oat/arm64/split_AdsDynamite_installtime.odex) is kOatUpToDate with filter 'verify' executable 'false'
+08-10 11:00:04.645 18239 18256 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~hZVYxzFmDzfiTfqkGkYKOA==/com.google.android.gms-fR8fSEd6YxCOeRrKPKPW5Q==/oat/arm64/split_CronetDynamite_installtime.odex) is kOatUpToDate with filter 'verify' executable 'false'
+08-10 11:00:04.649 18239 18256 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~hZVYxzFmDzfiTfqkGkYKOA==/com.google.android.gms-fR8fSEd6YxCOeRrKPKPW5Q==/oat/arm64/split_DynamiteLoader_installtime.odex) is kOatUpToDate with filter 'verify' executable 'false'
+08-10 11:00:04.658 18239 18260 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~hZVYxzFmDzfiTfqkGkYKOA==/com.google.android.gms-fR8fSEd6YxCOeRrKPKPW5Q==/oat/arm64/split_DynamiteModulesA_installtime.odex) is kOatUpToDate with filter 'verify' executable 'false'
+08-10 11:00:04.673 18239 18260 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~hZVYxzFmDzfiTfqkGkYKOA==/com.google.android.gms-fR8fSEd6YxCOeRrKPKPW5Q==/oat/arm64/split_DynamiteModulesC_installtime.odex) is kOatUpToDate with filter 'verify' executable 'false'
+08-10 11:00:04.680 18239 18260 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~hZVYxzFmDzfiTfqkGkYKOA==/com.google.android.gms-fR8fSEd6YxCOeRrKPKPW5Q==/oat/arm64/split_GoogleCertificates_installtime.odex) is kOatUpToDate with filter 'verify' executable 'false'
+08-10 11:00:04.690 18239 18260 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~hZVYxzFmDzfiTfqkGkYKOA==/com.google.android.gms-fR8fSEd6YxCOeRrKPKPW5Q==/oat/arm64/split_MapsDynamite_installtime.odex) is kOatUpToDate with filter 'verify' executable 'false'
+08-10 11:00:04.707 18239 18260 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~hZVYxzFmDzfiTfqkGkYKOA==/com.google.android.gms-fR8fSEd6YxCOeRrKPKPW5Q==/oat/arm64/split_MeasurementDynamite_installtime.odex) is kOatUpToDate with filter 'verify' executable 'false'
+08-10 11:00:04.717 18239 18260 I artd    : GetBestInfo: odex next to the dex file (/data/app/~~hZVYxzFmDzfiTfqkGkYKOA==/com.google.android.gms-fR8fSEd6YxCOeRrKPKPW5Q==/oat/arm64/split_maps_core_dynamite_ondemand.odex) is kOatUpToDate with filter 'verify' executable 'false'
+08-10 11:00:05.506 13932 14000 I Checkin : [CheckinApiChimeraService] onGetService
+08-10 11:00:06.040 18239 18260 I artd    : GetBestInfo: odex in dalvik-cache (/data/dalvik-cache/arm64/system@priv-app@Settings@Settings.apk@classes.dex) is kOatUpToDate with filter 'speed-profile' executable 'false'
+08-10 11:00:06.385 16980 17204 I PlayCore: UID: [10205]  PID: [16980] AppUpdateService : reportBinderDeath
+08-10 11:00:06.389 16980 17204 I PlayCore: UID: [10205]  PID: [16980] AppUpdateService : AppUpdateService : Binder has died.
+08-10 11:00:13.890 16770 16816 I DGW     : I[notifyPingFailure:2279] StreamGroupTransport[notifgateway] kill connection on ping timeout
+08-10 11:00:13.892 16770 16816 I DGW     : I[notifyStreamGroupError:1903] StreamGroupTransport[notifgateway] notify StreamGroup error: StreamGroupNetworkRequest failed - ping timeout error
+08-10 11:00:13.902 16770 16816 W DGW     : W[onPingFailure:593] ConnectivityManager ping failure TransientError domain: MNSHTTPClient code: 3 detail: Host session was closed, pending transactions: non-zero
+08-10 11:00:15.170  9605  9605 I adbd    : adbd service requested 'shell,v2,TERM=xterm-256color:export ANDROID_LOG_TAGS=''; exec logcat '-d''
