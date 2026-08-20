@@ -5,3 +5,4 @@ guard_log.txt
 app/build/
 build_output.log
 guard_log.txt
+.gradle/

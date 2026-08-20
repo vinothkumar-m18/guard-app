@@ -1,240 +1,251 @@
 # PROJECT_STATE.md
 
 ## What this is
-Android app that introduces deliberate friction between urge and action for compulsive porn use, 
-as a harm-reduction alternative to hard blocking (which backfired in a prior attempt via 6-7 day locks). 
-Goal: delay, not deny — exploit the fact that urges peak and decay within minutes if not acted on.
-Future phases (not yet started): extend friction mechanism to Reels/Shorts and gaming.
+Android app that introduces deliberate friction between urge and action for compulsive porn use,
+as a harm-reduction alternative to hard blocking (a prior 6-7 day hard lock backfired). Goal:
+delay, not deny — urges peak and decay within minutes if not acted on. Future phases (not started):
+extend friction to Reels/Shorts and gaming.
 
 ## Core mechanism (why, not just what)
-- Urges are time-limited (Marlatt's urge surfing / craving curve) — a 5-15 min delay lets the urge decay naturally.
-- Hot-cold empathy gap (Loewenstein) — delay gives the rational system time to re-engage before acting.
-- Long/total restriction triggers reactance (Brehm) and ironic suppression effects (Wegner) — this is why 
-  the previous 6-7 day lock failed. Short delay avoids this failure mode.
-- Friction interrupts automaticity (Wood & Neal) — cue-to-action habit loops require the routine step to run 
-  with minimal deliberation; forcing conscious engagement breaks that.
+- Urges are time-limited (Marlatt's urge surfing) — a 5-15 min delay lets the urge decay naturally.
+- Hot-cold empathy gap (Loewenstein) — delay lets the rational system re-engage before acting.
+- Total restriction triggers reactance (Brehm) / ironic suppression (Wegner) — why the 6-7 day
+  lock failed. Short delay avoids this.
+- Friction interrupts automaticity (Wood & Neal) — forcing conscious engagement breaks the
+  cue-to-action habit loop. This is the design principle behind every friction-scoping decision
+  below — friction must reapply at each new deliberate decision point, not just once per session.
 
-## IMPORTANT CURRENT STATUS FLAG
-The app currently performs INSTANT, PERMANENT blocking of porn domains — not the delay/friction 
-mechanism that is the actual core idea. We built the detection/blocking engine first (harder 
-technical problem). The 5-15 min randomized delay + reflection-prompt mechanism (the actual 
-"friction, not restriction" design) is NOT YET BUILT. This is the next major stage.
+## CURRENT STATUS (as of Session 9)
+Core detect → delay → reflect → confirm → temporary-unlock loop is BUILT and has been tested
+working end-to-end, on-device, at both shortened and production delay values.
 
-## Architecture decisions
+**FrictionState.kt was just rewritten (Session 9) and is UNTESTED on-device.** Do not assume it
+works until confirmed via the test plan below.
 
-### Detection & blocking (BUILT, confirmed working)
-- Android has no hosts-file access without root (unlike prior desktop version). Using VpnService 
-  API (local loopback VPN) — but SCOPED to DNS-only routing, not all traffic (see below).
-- **Selective routing** (not "route everything"): VPN only intercepts DNS (port 53) traffic, plus 
-  narrow /32 routes to known DoH resolver IPs (8.8.8.8, 8.8.4.4, 1.1.1.1, 1.0.0.1) to prevent 
-  browsers bypassing regular DNS via DNS-over-HTTPS. All other traffic (actual page/video content) 
-  bypasses the tunnel entirely — full native speed, confirmed via testing (Wikipedia/YouTube/X/
-  W3Schools all load normally).
-- **DNS relay logic** (DnsHandler.kt): for allowed domains, opens a protected UDP socket (via 
-  VpnService.protect() to avoid routing loop), forwards the real query to 8.8.8.8, relays the 
-  real answer back. For blocked domains, constructs a fake NXDOMAIN response directly and returns 
-  it — browser sees a standard "domain doesn't exist" failure before ever reaching the site's IP.
-- **DNS packet parsing** (DnsParser.kt): hand-parses raw IP/UDP/DNS packet structure to extract 
-  queried domain names — no external library needed, DNS uses a fixed length-prefixed label format.
-- **Blocklist**: uses StevenBlack/hosts "porn-only" curated list (76,749 domains), bundled as a 
-  local asset (app/src/main/assets/porn_blocklist.txt), loaded into an in-memory HashSet at VPN 
-  startup (BlocklistLoader.kt). Replaced an earlier 3-domain hand-typed list, which was easily 
-  evaded by mirror domains (e.g. xhamster's own xh*-branded bypass domains: xhopen.com, 
-  xhaccess.com, xhamster46.desi).
-- **AMP-cache fallback**: small keyword list (xhamster, pornhub, xvideos, xnxx) specifically to 
-  catch AMP-cache-proxied content (e.g. amp-xhamster-com.cdn.ampproject.org), which uses Google's 
-  own domain rather than the original site's — blocklist membership alone doesn't catch this 
-  pattern since it's a different domain entirely.
+## Architecture (BUILT, confirmed working as of Session 8)
+- VpnService, DNS-only scoped routing (port 53 UDP + narrow /32 routes to known DoH resolver IPs:
+  8.8.8.8, 8.8.4.4, 1.1.1.1, 1.0.0.1) — actual page/content traffic bypasses the tunnel entirely,
+  full native speed. This was a deliberate tradeoff: do NOT route all traffic (port 443/HTTPS)
+  through the tunnel to solve scoping problems — that undoes this speed guarantee (see Session 9
+  design discussion for why this was considered and rejected).
+- DnsHandler.kt: hand-parsed DNS packets (DnsParser.kt), blocklist check, either relays to real
+  DNS (8.8.8.8, via protected socket) or returns fake NXDOMAIN, OR (new) consults FrictionState.
+- Blocklist: StevenBlack/hosts porn-only list, 76,749 domains, local asset, in-memory HashSet
+  (BlocklistLoader.kt). Plus a small AMP-cache keyword fallback (xhamster/pornhub/xvideos/xnxx)
+  for Google-domain-proxied content that blocklist membership alone can't catch.
+- Friction UI: ReflectionActivity.kt + activity_reflection.xml — full-screen popup, live countdown,
+  "Proceed anyway" (hidden until delay elapses) / "Never mind" (clears attempt, fresh delay next
+  time). Fixed this session-chain: was rendering fully transparent (text bled through the browser
+  underneath) — fixed with explicit opaque white background + black text.
+- NotificationHelper.kt: fires on new blocked-domain attempt, launches ReflectionActivity.
 
-### NOT YET BUILT
-- **Delay/friction mechanism**: randomized 5-15 min delay + forced reflection input before 
-  allowing access, instead of current instant/permanent block. This is the actual core idea 
-  from the original concept — not yet implemented.
-- **Anti-habituation design** (planned, not built): randomize delay within a band (not fixed), 
-  require active engagement during wait (typed reflection) rather than passive countdown, 
-  escalate delay based on same-day frequency.
-- **Uninstall/disable friction**: Accessibility Service to detect and delay navigation toward 
-  Settings > App Info > Uninstall/Force Stop. Not started.
-  - Parked for v2 (only if v1 proves mechanism works but isn't sticky enough): Device Owner mode 
-    via factory reset + QR provisioning, for actual non-removability.
-- **UI polish**: currently just one button ("Start Guard VPN") and a debug log view. No real 
-  screen design yet.
+## FrictionState.kt — scoping design history (IMPORTANT — read before touching this file)
+Three approaches were tried across different AI tool sessions. Know which one is CURRENT:
 
-## Known limitations (accepted for v1, not blockers)
-- Raw IP address entry (typing an IP directly instead of a domain) bypasses DNS-based blocking 
-  entirely. Rare in practice for porn site usage. v2 hardening item.
-- Android Private DNS (DNS-over-TLS, port 853) is a separate potential bypass from DoH — not yet 
-  investigated/closed. Needs testing: check Settings > Network & Internet > Private DNS behavior 
-  against our VPN.
-- isDomainBlocked() does an O(n) loop over all 76,749 entries per DNS query for the subdomain-match 
-  case. Works for testing; should be optimized to O(number of domain levels) by checking parent-
-  domain segments directly against the HashSet.
-- Blocklist load takes ~7 seconds on VPN service startup (one-time, not per-query). Acceptable for 
-  now; could be moved earlier/made async later.
-- Some blocklist entries (e.g. cdn.tsyndicate.com) are generic ad/syndication domains also used by 
-  adult sites — possible rare false-positive blocks on unrelated content. Accepted given stated 
-  priority: no porn leaks > zero overblocking.
-- Android allows only one active VPN at a time — will conflict if user has another VPN app running.
+1. **Per-domain scoping** (Session 6, original): each literal hostname got its own temp-allow.
+   BROKEN — one page load touches 10-20+ different domains (CDNs, ad networks, analytics), each
+   independently blocklisted, so confirming one didn't unlock the page's own resources → popup
+   storm, page never fully loaded. Replaced.
 
-## Dev environment / tooling decision
-- **NOT using Android Studio** — laptop can't sustain it. Using **VS Code** (Kotlin extension) + 
-  **Gradle CLI** (`./gradlew assembleDebug`) for builds, outside the IDE shell.
-- **No emulator** — testing on physical Android phone (Vivo/OriginOS) via USB debugging (adb).
-- **No visual layout editor** — UI written by hand (XML layouts).
-- Requires: JDK 17 specifically (not newer versions — AGP/Gradle compatibility), Android SDK 
-  command-line tools + adb, installed standalone.
+2. **Session-wide fixed window** (Session 8, built + tested working in Claude): one confirm sets
+   one global `sessionAllowExpiresAt`, all domains relay for 25 min. FIXED the popup-storm bug,
+   confirmed working on-device. BUT: weak on the actual behavioral goal — after one confirm, ANY
+   site (not just the one you confirmed) opens with zero friction for 25 min, including unrelated
+   sites and fresh deliberate visits. Undermines "friction interrupts automaticity" since
+   automaticity is only interrupted once per window, not at each new decision.
+   NOTE: a separate, undocumented ChatGPT session also produced a conflicting "registrable-root"
+   version of this file around the same time — this caused real confusion (see below). Superseded.
 
-## Debugging method (IMPORTANT — logcat does not work on this device)
-- **adb logcat is suppressed for third-party app logs on this Vivo/OriginOS device.** Confirmed 
-  via full-buffer + PID-filtered logcat showing zero custom log lines despite OS-level lifecycle 
-  events being visible. Do NOT rely on logcat or Toast messages (Toast also unreliable due to 
-  Android's rate-limiting on rapid successive toasts) for debugging on this project.
-- **Standard debugging method going forward**: file-based logger (FileLog.kt) writes timestamped 
-  lines to the app's internal storage (files/guard_log.txt). Pull it to the project dir with:
-  ```
-  ~/android-sdk/platform-tools/adb shell run-as com.vinoth.guardapp cat files/guard_log.txt > guard_log.txt && cat guard_log.txt
-  ```
-- Common commands used throughout:
-  - Install/reinstall: `~/android-sdk/platform-tools/adb install -r app/build/outputs/apk/debug/app-debug.apk`
-  - Launch app directly (bypasses tapping icon): `~/android-sdk/platform-tools/adb shell am start -n com.vinoth.guardapp/.MainActivity`
-  - Build: `./gradlew.bat assembleDebug > build_output.log 2>&1` then `cat build_output.log`
-- Note: `adb` PATH resolution has a known quirk on this Windows/Git Bash setup — sometimes shows 
-  literal `%ANDROID_HOME%` unexpanded. Workaround: call adb via full path 
-  `~/android-sdk/platform-tools/adb` if the bare `adb` command isn't found. Not yet root-caused/fixed.
+3. **Registrable-root scoping** (found on disk unexpectedly at start of Session 9, from the
+   ChatGPT session referenced in Session 6's second log entry — was never actually tested,
+   despite Session 8's log describing a "confirmed working" test that was actually against
+   version 2 above, before it got overwritten). Groups by last-two-labels of the domain (e.g.
+   cdn.pornhub.com → pornhub.com). STILL BROKEN for the actual problem: a page's CDN/ad/analytics
+   domains are usually on ENTIRELY DIFFERENT root domains (phncdn.com, trafficjunky.net,
+   tsyndicate.com are not subdomains of pornhub.com) — root-matching doesn't group them.
+   Superseded before ever being tested.
+
+4. **Rolling-activity session (Option B) — CURRENT, Session 9, UNTESTED.** Instead of a fixed
+   expiry set once, tracks a rolling `lastActivityAt` timestamp refreshed on every allowed
+   blocked-domain query. Session stays "active" (all domains allowed) as long as new blocked-
+   domain queries keep arriving within `IDLE_GAP_MS` (45 sec) of each other — this naturally
+   covers a page's own CDN/ad bursts regardless of which root domain they're on, since they fire
+   in rapid succession. If 45+ seconds pass with no blocked-domain activity, the session lapses —
+   next blocked domain requires a fresh full delay, treated as a new deliberate decision rather
+   than page-load continuation. `MAX_SESSION_MS` (25 min) is a hard ceiling so continuous active
+   browsing can't extend forever.
+   KNOWN, ACCEPTED LIMITATION: cannot distinguish "same page loading resources" from "fast
+   deliberate hop to a new site within the idle gap" — both look identical to this heuristic.
+   Considered and rejected: true per-page accuracy via SNI/traffic inspection — would require
+   routing ALL HTTPS traffic (port 443) through the tunnel, undoing the DNS-only speed design.
+   Judged not worth the tradeoff.
+
+### IMMEDIATE NEXT STEP — Option B is built but NOT YET TESTED on-device
+Just built + BUILD SUCCESSFUL confirmed. Never installed/run. Test plan (production 5-15 min
+delay values are currently active, so this takes real time):
+1. Install, start VPN, visit a blocked site, wait through full delay, confirm.
+2. TEST 1 (active browsing stays unlocked): keep actively using that site for 1-2 min — confirm
+   no repeat popups.
+3. TEST 2 (idle re-locks it — the actual point of this rewrite): go idle 50+ seconds (lock phone
+   or switch apps), then try a blocked site again — confirm the popup DOES reappear with a fresh
+   delay. This is correct/expected, not a bug.
+4. Pull log via the method below, confirm behavior matches log lines (ALLOWED / FRICTION START /
+   FRICTION PENDING / REFLECTION: user proceeded / etc.)
+If the person wants a faster test pass first: temporarily shrink DELAY_MIN_MS/DELAY_MAX_MS in
+FrictionState.kt the same way it was done in Session 7-8 (10-20 sec), test, then MUST restore to
+5*60*1000L / 15*60*1000L before trusting/using the app for real — this was forgotten temporarily
+before and caught late, don't repeat that.
+
+## Also in progress, further behind: Accessibility Service (started via ChatGPT session, NOT reviewed/build-tested)
+Purpose: friction on two escape routes outside the VPN's reach —
+1. Android's Private DNS setting (Settings > Network & Internet > Private DNS) — confirmed OFF on
+   the test device, but one tap away from fully bypassing the VPN's DNS interception (OS-level
+   bypass, cannot be fixed inside the VPN service itself). Device Owner mode could fully disable
+   this setting via `DISALLOW_CONFIG_PRIVATE_DNS`, but requires factory reset + QR provisioning —
+   explicitly parked for v2, only if friction alone proves insufficient.
+2. Uninstall/Force-Stop protection (App Info screen).
+Plan agreed: minimal skeleton service first (logs every window/screen change: package + class
+name, NO detection logic yet) → navigate to both target screens manually while logging → read log
+to find this device's real screen identifiers (Vivo/OriginOS may differ from stock Android) →
+THEN write matching/interrupt logic.
+STATUS: A ChatGPT session (see Session 6 second log entry below) built GuardAccessibilityService.kt
+already, but skipped the skeleton-first step — current version logs the full node tree on EVERY
+screen change, system-wide, continuously, not scoped to Settings navigation. Flagged as needing a
+rewrite before use (battery/log-bloat risk) — NOT reviewed or build-tested since. Manifest additions
+(POST_NOTIFICATIONS, USE_FULL_SCREEN_INTENT, SYSTEM_ALERT_WINDOW permissions; service registration)
+also from that session, also not verified.
+accessibility_service_config.xml was separately created in a Claude session (typeWindowStateChanged,
+feedbackGeneric, flagReportViewIds, canRetrieveWindowContent=true) — verify this still matches
+what's on disk before continuing, given the cross-tool divergence issues seen with FrictionState.kt.
+
+## Known limitations (accepted, not blockers)
+- Raw IP address entry bypasses DNS-based blocking. Rare in practice. v2 item.
+- isDomainBlocked() is O(n) over 76,749 entries for the subdomain-match case. Works fine at
+  current scale; could be optimized to O(domain levels) later.
+- Blocklist load takes ~7 sec on VPN startup (one-time). Acceptable.
+- Some blocklist entries (e.g. cdn.tsyndicate.com) are generic domains also used by adult sites —
+  rare false-positive risk on unrelated content. Accepted: no porn leaks > zero overblocking.
+- Android allows only one active VPN at a time.
+- No reflection-text persistence — typed input is behavioral only (forces engagement), not logged
+  to storage. Open design decision, not yet made, whether to persist for pattern-tracking.
+
+## Dev environment
+- VS Code (Kotlin ext) + Gradle CLI, NOT Android Studio (laptop can't sustain it). No emulator —
+  physical Vivo/OriginOS phone via adb. No visual layout editor — XML written by hand.
+- JDK 17 specifically. Android SDK cmdline-tools + adb standalone.
+
+## Debugging method — logcat does NOT work on this device
+adb logcat is suppressed for third-party app logs on this Vivo/OriginOS device (confirmed). Use
+file-based logging only:
+
+~/android-sdk/platform-tools/adb shell run-as com.vinoth.guardapp cat files/guard_log.txt > guard_log.txt && cat guard_log.txt
+
+Other common commands:
+
+~/android-sdk/platform-tools/adb install -r app/build/outputs/apk/debug/app-debug.apk
+~/android-sdk/platform-tools/adb shell am start -n com.vinoth.guardapp/.MainActivity
+./gradlew.bat assembleDebug > build_output.log 2>&1 && cat build_output.log
+
+Note: bare `adb` sometimes shows unexpanded `%ANDROID_HOME%` on this Windows/Git Bash setup —
+use the full path above if that happens. Not root-caused.
 
 ## File/module map
-- `app/src/main/java/com/vinoth/guardapp/MainActivity.kt` — UI entry point, VPN permission request 
-  flow, starts GuardVpnService.
-- `app/src/main/java/com/vinoth/guardapp/GuardVpnService.kt` — establishes VPN interface (DNS + 
-  DoH-IP scoped routing), runs packet read loop, delegates each packet to DnsHandler.
-- `app/src/main/java/com/vinoth/guardapp/DnsParser.kt` — extracts queried domain name from raw 
-  IP/UDP/DNS packet bytes.
-- `app/src/main/java/com/vinoth/guardapp/DnsHandler.kt` — core blocking logic: checks domain 
-  against blocklist + AMP-cache keywords, either returns fake NXDOMAIN or relays to real DNS server.
-- `app/src/main/java/com/vinoth/guardapp/BlocklistLoader.kt` — loads porn_blocklist.txt asset into 
-  in-memory HashSet at startup.
-- `app/src/main/java/com/vinoth/guardapp/FileLog.kt` — file-based logger (see Debugging method above).
-- `app/src/main/assets/porn_blocklist.txt` — StevenBlack/hosts porn-only list, 76,749 domains.
-- `app/src/main/res/layout/activity_main.xml` — single button + scrollable log TextView.
-- `app/src/main/res/values/themes.xml` — minimal AppCompat theme.
-- `app/src/main/AndroidManifest.xml` — permissions (INTERNET, FOREGROUND_SERVICE), activity + 
-  VPN service registration.
+- `MainActivity.kt` — UI entry, VPN permission flow, starts GuardVpnService.
+- `GuardVpnService.kt` — VPN interface (DNS + DoH-IP scoped), packet read loop → DnsHandler.
+- `DnsParser.kt` — extracts domain names from raw DNS packets.
+- `DnsHandler.kt` — blocklist check, relay-or-NXDOMAIN, now consults FrictionState.
+- `FrictionState.kt` — friction state machine (see scoping history above — just rewritten, untested).
+- `BlocklistLoader.kt` — loads blocklist asset into HashSet.
+- `ReflectionActivity.kt` + `activity_reflection.xml` — friction popup UI.
+- `NotificationHelper.kt` — fires notification/launches ReflectionActivity on new attempt.
+- `GuardAccessibilityService.kt` + `accessibility_service_config.xml` — settings/uninstall
+  friction, in progress, not reviewed (see above).
+- `FileLog.kt` — file-based logger.
+- `app/src/main/assets/porn_blocklist.txt` — 76,749-domain blocklist.
 
-## Next steps
-1. Build the delay/friction mechanism (randomized 5-15 min delay + reflection prompt) — this is 
-   the actual core idea, not yet implemented. Currently blocking is instant/permanent.
-2. Investigate/close Android Private DNS (DoH-over-TLS, port 853) as a potential bypass.
-3. Optimize isDomainBlocked() from O(n) to O(domain levels) lookup.
-4. Build Accessibility Service for uninstall/disable friction.
-5. UI polish pass (currently minimal/debug-only).
-6. Once porn-blocking + friction mechanism is fully proven: extend to Reels/Shorts and gaming 
-   (different detection approach needed — no single discrete trigger moment like a DNS query; 
-   likely session-start or time-boxing based instead).
+## Next steps (in priority order)
+1. **Test the Session 9 FrictionState.kt rewrite on-device** (see test plan above) — this is
+   the immediate next action for a new session.
+2. Verify/rewrite GuardAccessibilityService.kt: scope it to Settings/App-Info navigation only
+   (currently logs everything, system-wide, continuously — needs fixing before use).
+3. Complete Accessibility Service: detect Private DNS screen + App Info/uninstall screen on this
+   specific device, add friction interrupt to both.
+4. Escalation logic: delay length increases based on same-day trigger frequency (not yet built —
+   deferred from Session 6, still relevant, possibly now more important given the rolling-session
+   approach lets a whole browsing session go unlocked after one confirm).
+5. Optimize isDomainBlocked() to O(domain levels).
+6. UI polish pass (currently minimal/debug).
+7. Once fully proven: extend friction mechanism to Reels/Shorts and gaming (different detection
+   approach needed — no single discrete trigger like a DNS query).
 
-## Tooling workflow (for context across AI tool switches)
-- Primary: Claude chat for step-by-step guidance + code for single well-scoped units (one file/function 
-  at a time). Architecture and interface decisions happen here, get written into this doc, before any 
+## Tooling workflow
+- Primary: Claude chat, one well-scoped file/unit at a time, verify-with-cat after every write,
+  before every build. Architecture decisions happen in chat, get written here, before any
   agentic tool touches code.
-- Agentic tools (Cursor/Copilot): reserved for multi-file integration/wiring and build-error debugging 
-  loops only — not for boilerplate or single-function generation, to conserve limited free-tier quota.
-- Secondary chat (ChatGPT, then Gemini): boilerplate/volume generation once architecture is decided, 
-  using this doc as pasted context.
-- This file is updated at the end of every session, before switching tools or accounts.
+- Agentic tools (Cursor/Copilot): multi-file wiring / build-error loops only.
+- Secondary chat (ChatGPT/Gemini): boilerplate once architecture is decided, using this doc as
+  context. CAUTION (learned the hard way, Session 6/9): a ChatGPT session diverged from this
+  doc's plan and produced a conflicting FrictionState.kt version without updating this file or
+  verifying against `cat` output — always diff what's actually on disk against this doc's
+  described state before trusting either, when switching tools.
+- This file updates at the end of every session, before switching tools/accounts.
 
-## Session Log (stage-level updates, for cross-tool continuity)
+## Session Log
+- **Sessions 1-3**: Environment setup (JDK 17, Android SDK, adb), minimal project skeleton built
+  and confirmed launching on physical device, no Android Studio/emulator used.
+- **Session 4**: GuardVpnService MVP — VPN interface + packet reading confirmed working.
+  Discovered logcat is suppressed on this device; switched to file-based logging permanently.
+  DnsParser.kt built, confirmed extracting real domain names from live traffic.
+- **Session 5**: Fixed a total-blackout bug (was routing ALL traffic). Redesigned to DNS-only
+  selective routing + DoH-IP blocking. Replaced a trivially-evaded 3-domain blocklist with the
+  76,749-domain StevenBlack list + AMP-cache keyword fallback. Confirmed working: detect+block
+  core complete, still instant/permanent (not yet friction-based).
+- **Session 6**: Built the friction state machine (delay + notification, per-domain scoping v1),
+  ReflectionActivity skeleton, NotificationHelper. Confirmed notification triggers correctly.
+  [Separate, later ChatGPT session also logged as "Session 6"]: built reflection UI in full
+  (countdown, typed-reflection gating, Never Mind), attempted per-registrable-root scoping
+  (untested, later found broken for third-party CDN/ad domains), and an early, unreviewed
+  Accessibility Service draft (logs everything system-wide, needs rescoping).
+- **Session 7**: Full-screen-intent auto-launch built. Found + fixed transparent-popup UI bug
+  (text bleeding through from the page underneath) — added opaque white background + black text.
+- **Session 8**: Diagnosed the per-domain scoping bug via log analysis (one page load touches
+  10-20+ unrelated blocklisted domains). Fixed via session-wide fixed-window scoping (v2 above);
+  confirmed working on-device at both shortened and production delay values. This was believed
+  to close out the core mechanism.
+- **Session 9 (current)**: Discovered the file on disk was actually the ChatGPT session's
+  registrable-root version (v3), not the tested session-wide version — the two tool sessions had
+  silently diverged. Diagnosed that v3 is also broken (third-party CDN/ad domains aren't
+  subdomains of the confirmed site's root). Discussed and rejected true per-page accuracy (would
+  require inspecting HTTPS/SNI traffic, undoing the DNS-only speed design). Designed and built
+  v4 — rolling-activity-timestamp session scoping (see design section above). BUILD SUCCESSFUL.
+  **NOT YET TESTED ON-DEVICE — this is the next session's first task.**
+  cat >> PROJECT_STATE.md << 'EOF'
 
-### Session 1
-- Repo `guard-app` created (private) on GitHub, cloned locally, origin configured.
-- Dev environment set up: JDK 17 installed and set as active Java version (was conflicting with 
-  pre-existing JDK 25 — fixed via JAVA_HOME + PATH ordering, had to specifically deal with Oracle's 
-  auto-managed `javapath` entry overriding manual PATH order on Windows).
-- Confirmed working: `java --version` correctly returns 17.x in project terminal.
-
-### Session 2
-- Installed Android SDK command-line tools into `~/android-sdk/cmdline-tools/latest`.
-- Set `ANDROID_HOME` env var + PATH entries. Installed platform-tools, platforms;android-34, 
-  build-tools;34.0.0 via sdkmanager.
-- Verified `adb` works and connects to physical phone via USB debugging.
-
-### Session 3
-- Built minimal project skeleton by hand (Gradle files, manifest, theme, layout, MainActivity).
-- Fixed build errors: missing android.useAndroidX=true, missing themes.xml file (lesson: always 
-  verify file content with `cat` after creating, don't assume heredoc succeeded).
-- BUILD SUCCESSFUL, installed on physical phone, confirmed app launches. Full toolchain verified 
-  end-to-end with no Android Studio, no emulator.
-
-### Session 4
-- Built GuardVpnService MVP: establishes VPN interface, reads raw packets in background thread.
-- Discovered adb logcat is suppressed for third-party logs on this Vivo device — switched to 
-  file-based logging (FileLog.kt) as the standard debugging method going forward.
-- CONFIRMED WORKING: VPN interface establishes and receives real packets.
-- Built DnsParser.kt to extract domain names from raw DNS query packets — confirmed working on 
-  live traffic.
-
-### Session 5
-- Discovered initial VPN routed ALL traffic (addRoute 0.0.0.0/0) with no forwarding logic — 
-  total internet blackout. User clarified actual requirement: normal speed preserved + effective 
-  porn blocking with no easy bypasses.
-- Redesigned to DNS-only selective routing + DoH-IP blocking + real DNS relay for allowed domains 
-  + fake NXDOMAIN response for blocked domains (DnsHandler.kt).
-- Discovered hand-typed 3-domain blocklist was trivially evaded by mirror/bypass domains 
-  (xhamster's own xh*-branded network: xhopen.com, xhaccess.com, xhamster46.desi, AMP-cache 
-  proxying via cdn.ampproject.org).
-- Replaced with real curated blocklist: StevenBlack/hosts porn-only list (76,749 domains), bundled 
-  as local asset, loaded into in-memory HashSet (BlocklistLoader.kt). Added AMP-cache keyword 
-  fallback for the Google-domain-proxy case that blocklist membership alone can't catch.
-- CONFIRMED FIXED via retest: all previously-escaping domains now correctly blocked, normal sites 
-  still load normally. This completes the "detect and block" core mechanism.
-- STATUS: blocking is currently instant/permanent, NOT the delay/friction mechanism that was the 
-  original core idea. That is the next major stage — not yet started.
-  ## HANDOFF NOTE FOR NEXT SESSION (new Claude account/instance)
-
-If you're a new Claude instance picking this up: read this whole file first, especially the 
-"IMPORTANT CURRENT STATUS FLAG" and "Debugging method" sections above before doing anything. 
-The user (Vinoth) prefers first-principles explanations backed by research, values simplicity 
-over complexity, wants honest/direct feedback without sugarcoating, and is building this himself 
-using free-tier AI tools only (no subscriptions) — so keep guidance in small, exact, copy-pasteable 
-steps (he's explicitly asked for low-level, non-abstract instructions, broken into sub-steps). 
-He is a CS background /learning software engineering, so batch conceptual explanations at stage 
-boundaries rather than narrating every line.
-
-### Immediate next task
-Build the delay/friction mechanism — this is the actual core idea of the whole project and is 
-NOT yet built. Currently the app does instant, permanent DNS-level blocking of porn domains 
-(confirmed working). What's needed instead:
-1. When a blocked domain is queried, instead of immediately returning NXDOMAIN, start a 
-   randomized delay window (5–15 minutes, randomized each time — not fixed, to resist habituation).
-2. During the delay, show the user a screen requiring active engagement (e.g. typed reflection: 
-   what triggered this urge, what they're feeling) — not a passive countdown, which can be idled 
-   out without any cognitive engagement.
-3. After the delay expires, only THEN allow the domain through (relay to real DNS) if the user 
-   still wants to proceed — or continue blocking if they navigate away/close the flow.
-4. Escalate delay length based on same-day trigger frequency (tie friction strength to actual 
-   behavior data, not a static constant).
-
-### Implementation considerations to think through with the user before coding
-- Where does the delay/reflection UI live? DNS blocking happens deep inside GuardVpnService 
-  (a background service, not an Activity) — need a way to surface a foreground UI from there 
-  (likely: service posts a notification or launches an Activity over other apps) when a blocked 
-  domain is first hit, distinct from just returning NXDOMAIN silently.
-- Need a way to track "this domain is currently in its delay window" vs "permanently blocked" 
-  vs "user chose to proceed after delay" — some kind of in-memory (or persisted) state per domain 
-  attempt, with timestamps.
-- Decide how "the user chooses to proceed after the delay" is actually communicated back to the 
-  DNS layer — e.g. a temporary allowlist entry with expiry, set after the reflection flow completes.
-
-### After that, remaining stages (see "Next steps" section above for full list)
-- Investigate/close Android Private DNS (port 853) as a bypass — not yet tested.
-- Optimize blocklist lookup from O(n) to O(domain levels).
-- Build Accessibility Service for uninstall/disable friction (not started at all).
-- UI polish (currently one button + debug log view only).
-- Eventually extend friction mechanism to Reels/Shorts and gaming — explicitly deferred until 
-  porn-blocking + delay mechanism is fully proven. Note: these need a different detection approach 
-  entirely (no single discrete trigger moment like a DNS query — likely session-start or 
-  time-boxing based instead), do not assume the DNS approach generalizes.
-
-### Workflow reminder
-User cycles across multiple free-tier AI accounts (Claude/ChatGPT/Gemini x3 each, Copilot x2) to 
-manage rate limits, using this file as shared memory across switches. Update this Session Log 
-with a new dated entry at the end of your session, batched at the stage level (not line-by-line), 
-before handoff to the next tool/account.
+- **Session 10**: Found accessibility service was dumping full node tree on every screen event
+  system-wide (not scoped to Settings nav as intended) — was pegging device I/O, caused a blank
+  white MainActivity screen. Disabled the service on-device, cleared bloated log (was 19MB/228k
+  lines). Confirmed FrictionState v4 rolling-session logic itself is correct (FRICTION
+  PENDING/START behaving as designed). Separately discovered OverlayHelper.kt described as
+  "BUILT" in this doc's Architecture section did NOT actually exist on disk, and
+  SYSTEM_ALERT_WINDOW was missing from the manifest — friction was silently degrading to
+  tap-only notifications (MainActivity had a stray comment "no overlay permission handling
+  anymore", confirming it was removed at some point, another cross-tool divergence case).
+  Rebuilt OverlayHelper.kt (WindowManager TYPE_APPLICATION_OVERLAY, reproduces
+  ReflectionActivity's countdown/reflection/proceed/never-mind logic via inflated
+  activity_reflection.xml), added SYSTEM_ALERT_WINDOW to manifest, added overlay permission
+  request flow to MainActivity.onCreate, wired DnsHandler's FRICTION START branch to prefer
+  OverlayHelper.showFrictionOverlay() with NotificationHelper as fallback when permission is
+  missing. BUILD SUCCESSFUL, installed. Log shows "OverlayHelper: overlay shown for
+  www.pornhub.com" followed by a Never Mind reflection entry — suggests overlay did render and
+  was interacted with, but user reported the "Display over other apps" settings screen did NOT
+  auto-open on launch as MainActivity's new code expects, and Guard was still absent from that
+  settings list as of last check this session.
+  **UNRESOLVED / NEXT SESSION FIRST TASK**: reconcile these two facts — either overlay permission
+  was already effectively granted through some other path (stale grant surviving reinstall, or
+  OriginOS auto-granting once the manifest declares it) despite not showing in the Settings UI,
+  or the log line is misleading and needs re-verification with the user directly confirming they
+  *visually saw* the full-screen popup (not inferred from log alone). Do not assume the overlay
+  fix is confirmed working until this is nailed down with an explicit user-observed test.
+  ReflectionActivity.kt (the old full-screen-intent Activity path) still exists and is unused now
+  that DnsHandler routes through OverlayHelper first — decide later whether to keep as fallback
+  reference or remove.

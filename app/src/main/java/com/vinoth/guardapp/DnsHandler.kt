@@ -8,9 +8,6 @@ import java.net.InetAddress
 
 object DnsHandler {
 
-    // Fallback keyword check for AMP-cache-proxied content, which uses Google's own domain
-    // (cdn.ampproject.org) rather than the original site's domain, so blocklist membership
-    // alone won't catch it.
     private val ampCacheKeywords = setOf("xhamster", "pornhub", "xvideos", "xnxx")
 
     private lateinit var blockedDomains: HashSet<String>
@@ -45,25 +42,41 @@ object DnsHandler {
 
         val isBlocked = isDomainBlocked(domainLower)
 
-        if (isBlocked) {
-            FileLog.write(service, "BLOCKED: $domain")
-            val response = buildNxDomainResponse(packet, length, ipHeaderLength, udpStart, dnsStart)
-            output.write(response)
-        } else {
+        if (!isBlocked) {
             FileLog.write(service, "ALLOWED: $domain")
             relayToRealDns(service, packet, length, ipHeaderLength, udpStart, dnsStart, output)
+            return
         }
+
+        // Blocked domain -> friction state machine (replaces old instant-permanent NXDOMAIN)
+        if (FrictionState.shouldAllow(domainLower)) {
+            FileLog.write(service, "TEMP-ALLOWED (friction window active): $domain")
+            relayToRealDns(service, packet, length, ipHeaderLength, udpStart, dnsStart, output)
+            return
+        }
+
+        val isNewAttempt = FrictionState.registerAttemptIfNew(domainLower)
+        if (isNewAttempt) {
+            FileLog.write(service, "FRICTION START: $domain")
+            if (OverlayHelper.canShowOverlay(service)) {
+                OverlayHelper.showFrictionOverlay(service, domainLower)
+            } else {
+                NotificationHelper.showFrictionNotification(service, domainLower)
+            }
+        } else {
+            FileLog.write(service, "FRICTION PENDING (still in delay, no new notif): $domain")
+        }
+
+        val response = buildNxDomainResponse(packet, length, ipHeaderLength, udpStart, dnsStart)
+        output.write(response)
     }
 
     private fun isDomainBlocked(domain: String): Boolean {
-        // Exact match or subdomain-of-blocklisted-domain match
         if (blockedDomains.contains(domain)) return true
         for (blocked in blockedDomains) {
             if (domain.endsWith(".$blocked")) return true
         }
-        // AMP-cache proxy fallback
         if (ampCacheKeywords.any { domain.contains(it) }) return true
-
         return false
     }
 
