@@ -4,7 +4,6 @@ import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -12,7 +11,10 @@ import android.widget.Toast
 
 class ReflectionActivity : Activity() {
 
-    private const val MIN_REFLECTION_CHARS = 10
+    companion object {
+        private const val MIN_REFLECTION_CHARS = 10
+    }
+
     private var domain: String = ""
     private val handler = Handler(Looper.getMainLooper())
     private var tickRunnable: Runnable? = null
@@ -81,7 +83,7 @@ class ReflectionActivity : Activity() {
                 val seconds = totalSeconds % 60
                 timerText.text = String.format("%02d:%02d", minutes, seconds)
                 proceedButton.isEnabled = false
-                proceedButton.text = "Proceeding locked ($totalSeconds s)"
+                proceedButton.text = "Proceeding locked (${totalSeconds}s)"
 
                 handler.postDelayed(this, 1000)
             }
