@@ -2,10 +2,10 @@ package com.vinoth.guardapp
 
 object FrictionState {
 
-    // === TEST MODE DELAYS (15 SECONDS) ===
+    // === TEST MODE DELAYS (8 SECONDS) ===
     // Note: Restore to (5 * 60 * 1000L / 15 * 60 * 1000L) for production release
-    private const val DELAY_MIN_MS = 15_000L  // 15 seconds
-    private const val DELAY_MAX_MS = 15_000L  // 15 seconds
+    private const val DELAY_MIN_MS = 8_000L  // 8 seconds
+    private const val DELAY_MAX_MS = 8_000L  // 8 seconds
 
     // Option B: 45-second idle gap before session lapses
     private const val IDLE_GAP_MS = 45_000L
@@ -52,7 +52,7 @@ object FrictionState {
                 return false // Delay still ticking
             }
 
-            // Set new friction period (15s)
+            // Set new friction period (8s)
             val delay = if (DELAY_MAX_MS > DELAY_MIN_MS) {
                 DELAY_MIN_MS + (Math.random() * (DELAY_MAX_MS - DELAY_MIN_MS)).toLong()
             } else {

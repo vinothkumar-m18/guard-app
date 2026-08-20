@@ -16,7 +16,8 @@ import android.widget.Toast
 
 object OverlayHelper {
 
-    private const val MIN_REFLECTION_CHARS = 10
+    // 3 characters for quick testing
+    private const val MIN_REFLECTION_CHARS = 3
     private var windowManager: WindowManager? = null
     private var overlayView: View? = null
     private var currentDomain: String? = null
@@ -69,7 +70,7 @@ object OverlayHelper {
             val reflectionInput = view.findViewById<EditText>(R.id.reflectionInput)
 
             domainText.text = "Blocked: $domain"
-            proceedButton.isEnabled = false
+            proceedButton.visibility = View.GONE
 
             proceedButton.setOnClickListener {
                 val reflection = reflectionInput.text.toString().trim()
@@ -119,7 +120,8 @@ object OverlayHelper {
 
                 val remainingMs = delayEndsAt - System.currentTimeMillis()
                 if (remainingMs <= 0) {
-                    timerText.text = "00:00"
+                    timerText.text = "00:00 (Delay Finished)"
+                    proceedButton.visibility = View.VISIBLE
                     proceedButton.isEnabled = true
                     proceedButton.text = "Proceed anyway"
                     return
@@ -129,8 +131,7 @@ object OverlayHelper {
                 val minutes = totalSeconds / 60
                 val seconds = totalSeconds % 60
                 timerText.text = String.format("%02d:%02d", minutes, seconds)
-                proceedButton.isEnabled = false
-                proceedButton.text = "Proceeding locked ($totalSeconds s)"
+                proceedButton.visibility = View.GONE
 
                 handler.postDelayed(this, 1000)
             }
