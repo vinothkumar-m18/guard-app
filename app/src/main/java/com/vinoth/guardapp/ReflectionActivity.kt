@@ -1,54 +1,48 @@
 package com.vinoth.guardapp
 
+import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 
-class ReflectionActivity : AppCompatActivity() {
+class ReflectionActivity : Activity() {
 
-    private lateinit var domain: String
-    private lateinit var timerText: TextView
-    private lateinit var domainText: TextView
-    private lateinit var proceedButton: Button
-    private lateinit var neverMindButton: Button
-    private lateinit var reflectionInput: EditText
+    private const val MIN_REFLECTION_CHARS = 10
+    private var domain: String = ""
     private val handler = Handler(Looper.getMainLooper())
     private var tickRunnable: Runnable? = null
-
-    private val MIN_REFLECTION_CHARS = 10
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reflection)
 
-        domain = intent.getStringExtra("domain") ?: run {
-            finish()
-            return
-        }
+        domain = intent.getStringExtra("domain") ?: ""
 
-        domainText = findViewById(R.id.domainText)
-        timerText = findViewById(R.id.timerText)
-        proceedButton = findViewById(R.id.proceedButton)
-        neverMindButton = findViewById(R.id.neverMindButton)
-        reflectionInput = findViewById(R.id.reflectionInput)
+        val domainText = findViewById<TextView>(R.id.domainText)
+        val timerText = findViewById<TextView>(R.id.timerText)
+        val proceedButton = findViewById<Button>(R.id.proceedButton)
+        val neverMindButton = findViewById<Button>(R.id.neverMindButton)
+        val reflectionInput = findViewById<EditText>(R.id.reflectionInput)
 
         domainText.text = "Blocked: $domain"
+        proceedButton.isEnabled = false
 
         proceedButton.setOnClickListener {
             val reflection = reflectionInput.text.toString().trim()
             if (reflection.length < MIN_REFLECTION_CHARS) {
                 Toast.makeText(
                     this,
-                    "Please write a bit more about what you're feeling first",
+                    "Please write at least $MIN_REFLECTION_CHARS characters about what you are feeling",
                     Toast.LENGTH_SHORT
                 ).show()
                 return@setOnClickListener
             }
+
             FileLog.write(this, "REFLECTION: user proceeded for $domain | reflection: \"$reflection\"")
             FrictionState.grantTemporaryAllow(domain)
             finish()
@@ -61,44 +55,42 @@ class ReflectionActivity : AppCompatActivity() {
             finish()
         }
 
-        startTicking()
+        startTicking(timerText, proceedButton)
     }
 
-    private fun startTicking() {
+    private fun startTicking(timerText: TextView, proceedButton: Button) {
         tickRunnable = object : Runnable {
             override fun run() {
-                updateTimerDisplay()
+                val delayEndsAt = FrictionState.getDelayEndsAt(domain)
+                if (delayEndsAt == null) {
+                    timerText.text = "--:--"
+                    handler.postDelayed(this, 1000)
+                    return
+                }
+
+                val remainingMs = delayEndsAt - System.currentTimeMillis()
+                if (remainingMs <= 0) {
+                    timerText.text = "00:00"
+                    proceedButton.isEnabled = true
+                    proceedButton.text = "Proceed anyway"
+                    return
+                }
+
+                val totalSeconds = remainingMs / 1000
+                val minutes = totalSeconds / 60
+                val seconds = totalSeconds % 60
+                timerText.text = String.format("%02d:%02d", minutes, seconds)
+                proceedButton.isEnabled = false
+                proceedButton.text = "Proceeding locked ($totalSeconds s)"
+
                 handler.postDelayed(this, 1000)
             }
         }
         handler.post(tickRunnable!!)
     }
 
-    private fun updateTimerDisplay() {
-        val delayEndsAt = FrictionState.getDelayEndsAt(domain)
-        if (delayEndsAt == null) {
-            timerText.text = "--:--"
-            return
-        }
-        val remainingMs = delayEndsAt - System.currentTimeMillis()
-        if (remainingMs <= 0) {
-            timerText.text = "Time's up"
-            proceedButton.visibility = android.view.View.VISIBLE
-            stopTicking()
-            return
-        }
-        val totalSeconds = remainingMs / 1000
-        val minutes = totalSeconds / 60
-        val seconds = totalSeconds % 60
-        timerText.text = String.format("%02d:%02d", minutes, seconds)
-    }
-
-    private fun stopTicking() {
-        tickRunnable?.let { handler.removeCallbacks(it) }
-    }
-
     override fun onDestroy() {
-        stopTicking()
         super.onDestroy()
+        tickRunnable?.let { handler.removeCallbacks(it) }
     }
 }
